@@ -1,0 +1,4 @@
+No	TMNo	EnNo	Name	GMNo	Mode	DateTime
+1	1	1	usuario 1	0	1	2000/05/28 10:51:39
+2	1	1	usuario 1	0	1	2000/05/28 10:51:46
+3	1	2	usuario 2	0	1	2000/05/28 11:00:00
