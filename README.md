@@ -106,13 +106,13 @@ Acompanhamento conceitual do progresso do projeto. Marcar com [x] ao concluir ca
 
 [x] Tratamento de encoding e separadores
 
-[ ] Fase 2: Transformação Nível 1 (Limpeza)
+[x] Fase 2: Transformação Nível 1 (Limpeza)
 
-[ ] Remoção de colunas desnecessárias
+[x] Remoção de colunas desnecessárias
 
-[ ] Conversão e tipagem do DateTime
+[x] Conversão e tipagem do DateTime
 
-[ ] Padronização dos nomes
+[x] Padronização dos nomes
 
 [ ] Fase 3: Transformação Nível 2 (Anti-Spam)
 
