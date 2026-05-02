@@ -92,19 +92,19 @@ Formato Primário: Salvar como dados_ponto.json para garantir a preservação da
 
 Acompanhamento conceitual do progresso do projeto. Marcar com [x] ao concluir cada etapa.
 
-[ ] Fase 0: Setup Inicial
+[x] Fase 0: Setup Inicial
 
 [x] Definição da Arquitetura e Regras
 
 [x] Criação da estrutura de pastas
 
-[ ] Configuração do repositório Git
+[x] Configuração do repositório Git
 
-[ ] Fase 1: Extração (Extract)
+[x] Fase 1: Extração (Extract)
 
-[ ] Carregamento do TXT bruto
+[x] Carregamento do TXT bruto
 
-[ ] Tratamento de encoding e separadores
+[x] Tratamento de encoding e separadores
 
 [ ] Fase 2: Transformação Nível 1 (Limpeza)
 
