@@ -1,7 +1,7 @@
 """ETL — extração inicial do arquivo de ponto.
 
 Módulo responsável pela leitura do arquivo bruto AGL_001.TXT e transformações
-iniciais (Fase 1: Extração, Fase 2: Limpeza Estrutural).
+(Fase 1: Extração, Fase 2: Limpeza Estrutural, Fase 3: Anti-Spam).
 
 Funções públicas:
 - `resolve_raw_file_path(raw_file)`: localiza o arquivo bruto.
@@ -10,6 +10,9 @@ Funções públicas:
 - `parse_datetime(df)`: converte DateTime para datetime64[ns].
 - `clean_names(df)`: padroniza Name (strip + Title Case).
 - `transform_level1(df)`: orquestrador da limpeza estrutural.
+- `identify_employee(df)`: cria coluna Employee para agrupamento.
+- `apply_anti_spam_rule(df, min_gap_minutes)`: remove duplicatas (gap < 5 min).
+- `transform_level2(df)`: orquestrador da regra anti-spam.
 
 As docstrings são concisas para não poluir o corpo das funções.
 """
@@ -104,11 +107,62 @@ def transform_level1(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def identify_employee(df: pd.DataFrame) -> pd.DataFrame:
+    """Criar coluna Employee para agrupamento por funcionário.
+
+    Combina EnNo e Name em formato "EnNo_Name" para identificação única.
+    """
+    df = df.copy()
+    df["Employee"] = df["EnNo"].astype(str) + "_" + df["Name"]
+    return df
+
+
+def apply_anti_spam_rule(df: pd.DataFrame, min_gap_minutes: int = 5) -> pd.DataFrame:
+    """Remove duplicatas de batidas (gap < min_gap_minutes do mesmo funcionário).
+
+    Agrupa por Employee, ordena por DateTime, e descarta batidas consecutivas
+    com intervalo menor que min_gap_minutes.
+    """
+    df = df.copy()
+    df = identify_employee(df)
+
+    # Índices das linhas a manter
+    rows_to_keep = []
+
+    for _, group in df.groupby("Employee"):
+        group_sorted = group.sort_values("DateTime").reset_index(drop=True)
+
+        for idx, row in group_sorted.iterrows():
+            # Primeira batida do funcionário: sempre mantém
+            if idx == 0:
+                rows_to_keep.append(row.name)
+            else:
+                # Verifica gap em relação à batida anterior
+                prev_row = group_sorted.iloc[idx - 1]
+                gap = (row["DateTime"] - prev_row["DateTime"]).total_seconds() / 60
+                if gap >= min_gap_minutes:
+                    rows_to_keep.append(row.name)
+
+    result = df.loc[rows_to_keep].drop(columns=["Employee"])
+    return result.reset_index(drop=True)
+
+
+def transform_level2(df: pd.DataFrame) -> pd.DataFrame:
+    """Orquestrador da Transformação Nível 2 (Regra Anti-Spam).
+
+    Remove duplicatas de batidas dentro do mesmo funcionário com gap < 5 min.
+    Retorna DataFrame filtrado pronto para Nível 3.
+    """
+    df = apply_anti_spam_rule(df)
+    return df
+
+
 def main() -> None:
-    """Entrypoint mínimo para inspeção: imprime `head()` do DataFrame limpo."""
+    """Entrypoint mínimo para inspeção: imprime `head()` do DataFrame após L2."""
     raw_log = load_raw_log()
     cleaned = transform_level1(raw_log)
-    print(cleaned.head())
+    filtered = transform_level2(cleaned)
+    print(filtered.head())
 
 
 if __name__ == "__main__":
