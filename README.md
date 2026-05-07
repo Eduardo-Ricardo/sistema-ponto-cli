@@ -1,133 +1,220 @@
-📊 Arquitetura do Projeto: ETL de Ponto Eletrônico
+# 📊 Sistema Ponto CLI — ETL de Relógio Eletrônico
 
-1. Visão Geral
+Pipeline ETL que transforma logs brutos de relógio de ponto em dados estruturados e limpos.
 
-Este projeto consiste no desenvolvimento de um pipeline de dados (ETL - Extração, Transformação e Carga) escrito em Python. O objetivo é processar logs brutos de um relógio de ponto físico (arquivo TXT), aplicar regras de negócio (limpeza de spam/duplicatas) e estruturar as batidas em uma hierarquia temporal limpa para posterior cálculo de folha de pagamento ou dashboards.
+## ⚡ Quick Links
 
-2. Padrão Arquitetural (Modular ETL Pipeline)
+- 🚀 **[Quick Start](docs/QUICK_START.md)** — Setup e primeiro teste em 2 minutos
+- 📚 **[Documentação Completa](docs/README.md)** — Índice de todos os guias
+- 🏗️ **[Arquitetura](docs/ARCHITECTURE.md)** — Padrão de design e princípios
+- 📋 **[Fases (1-5)](docs/PHASES.md)** — Detalhamento de cada etapa do ETL
+- 🔧 **[API Reference](docs/API.md)** — Todas as funções públicas
+- 🧪 **[Testing Guide](docs/TESTING.md)** — Estratégia de testes
+- 🔀 **[Git Workflow](docs/GIT_WORKFLOW.md)** — Branches, commits, merges
 
-Dada a natureza de processamento de dados do projeto, utilizaremos a arquitetura de Pipeline Modular de Dados.
+## O que faz?
 
-O projeto rejeita padrões de interface (como MVC) em favor de um fluxo funcional estrito:
+**Input**: `data/raw/AGL_001.TXT` (tab-delimitado, ~7744 linhas)
+```
+No | TMNo | EnNo | Name       | GMNo | Mode | DateTime
+1  | 1    | 1    | usuario 1  | 0    | 1    | 2000/05/28 10:51:39
+2  | 1    | 1    | usuario 1  | 0    | 1    | 2000/05/28 10:51:46  ← duplicata
+```
 
-Orquestração: Um bloco main que coordena o fluxo de dados.
+**Output**: `data/processed/dados_ponto.json` (hierarquia limpa)
+```json
+{
+  "2000": {
+    "05": {
+      "28": {
+        "1_Usuario 1": ["10:51:39"],
+        "2_Usuario 2": ["11:00:00"]
+      }
+    }
+  }
+}
+```
 
-Modularidade: Cada fase do ETL (Leitura, Limpeza, Anti-Spam, Estruturação e Exportação) será encapsulada em sua própria função isolada.
+## Status
 
-Desacoplamento: Funções auxiliares pesadas estarão no arquivo utils.py, mantendo o etl_pipeline.py limpo e legível.
+- ✅ **Fase 1** (Extração) — Completo
+- ✅ **Fase 2** (Limpeza L1) — Completo
+- 🚧 **Fase 3** (Anti-Spam) — Em documentação
+- [ ] **Fase 4** (Hierarquia) — Planejado
+- [ ] **Fase 5** (Carga JSON) — Planejado
 
-3. Pontos de Partida e Chegada (Milestones)
+## Setup Rápido
 
-Ponto de Partida (As-Is): Arquivo bruto AGL_001.TXT extraído diretamente da máquina.
+```bash
+git clone https://github.com/Eduardo-Ricardo/sistema-ponto-cli.git
+cd sistema-ponto-cli
+pip install -r requirements.txt
+pytest -v
+python src/etl_pipeline.py
+```
 
-Estrutura suja, separada por tabulações (\t), contendo colunas inúteis e batidas duplicadas (spam de leitura do dedo do funcionário).
+---
 
-Ponto de Chegada (To-Be): Um pipeline automatizado que converte o TXT sujo em um arquivo estruturado (JSON e/ou Excel).
+## Estrutura
 
-Dados padronizados e organizados na seguinte hierarquia cronológica estrita: Ano -> Mês -> Funcionário -> Data -> [Batida 1, Batida 2, ...].
+## Estrutura
 
-4. Metodologia de Trabalho (Workflow Iterativo e Git Flow)
-
-Para garantir a integridade dos dados e a qualidade do código, este projeto segue um ciclo estrito de validação e versionamento:
-
-Isolamento de Funcionalidade (Branches): Cada nova fase ou módulo é desenvolvido estritamente em uma branch separada (ex: feature/fase-1-leitura).
-
-Desenvolvimento Segmentado: O código é escrito bloco a bloco dentro de sua respectiva branch.
-
-Validação de Output: Cada bloco é testado localmente para garantir que as regras de negócio foram aplicadas.
-
-Versionamento e Integração (Merge): Após a aprovação do teste, o bloco recebe um commit. Em seguida, é feito o merge (integração) com a branch main (principal).
-
-5. Estrutura do Repositório
-
-A estrutura de pastas do projeto deve seguir as boas práticas de Engenharia de Dados:
-/
+```
+sistema-ponto-cli/
 ├── data/
-│   ├── raw/                  # Onde os arquivos TXT originais serão colocados (ex: AGL_001.TXT)
-│   └── processed/            # Onde os arquivos JSON/Excel limpos serão salvos
+│   ├── raw/                  # Input: AGL_001.TXT bruto
+│   └── processed/            # Output: dados_ponto.json (Fase 5)
 ├── src/
-│   ├── etl_pipeline.py       # Script principal do ETL
-│   └── utils.py              # (Opcional) Funções auxiliares de cálculo de horas
-├── README.md                 # Este documento de arquitetura
-├── requirements.txt          # Dependências do projeto (ex: pandas)
-└── .gitignore                # Ignorar ambientes virtuais e dados sensíveis
+│   ├── etl_pipeline.py       # Core ETL (9 funções públicas)
+│   └── __init__.py
+├── tests/
+│   ├── test_extraction.py           # Testes Fase 1 (2 testes ✅)
+│   ├── test_level1_cleaning.py      # Testes Fase 2 (4 testes ✅)
+│   ├── test_level2_anti_spam.py     # Testes Fase 3 (5 testes 🚧)
+│   └── fixtures/sample_agl.txt      # Fixture reutilizável
+├── docs/
+│   ├── README.md             # Índice da documentação
+│   ├── QUICK_START.md        # Setup em 2 minutos
+│   ├── ARCHITECTURE.md       # Padrão arquitetural
+│   ├── PHASES.md             # Detalhamento das 5 fases
+│   ├── API.md                # Referência de funções
+│   ├── TESTING.md            # Estratégia de testes
+│   └── GIT_WORKFLOW.md       # Branches, commits, merges
+├── .gitignore
+├── requirements.txt          # pandas, pytest
+└── README.md                 # Este arquivo
+```
 
-6. Fases de Desenvolvimento e Regras de Negócio (O Pipeline)
+## Tech Stack
 
-Fase 1: Extração (Extract)
+- **Python 3.12.1**
+- **pandas 3.0.2** — Manipulação de dados tabular
+- **pytest 9.0.3** — Testes unitários
+- **Git Flow** — Versionamento com feature branches
 
-Ação: Ler o arquivo /data/raw/AGL_001.TXT.
+## Roadmap (Checklist)
 
-Desafio: Lidar com codificação de caracteres (encoding) e separadores de tabulação.
+### ✅ Completo
 
-Fase 2: Transformação Nível 1 (Limpeza Estrutural)
+- [x] **Fase 0**: Setup, estrutura de pastas, git
+- [x] **Fase 1**: Extração com encoding fallback
+- [x] **Fase 2**: Limpeza estrutural (drop coluna, type cast, strings)
 
-Drop de Colunas: Descartar as colunas No, TMNo, GMNo e Mode.
+### 🚧 Em Desenvolvimento
 
-Tipagem Forte: Converter a coluna DateTime obrigatoriamente para o formato datetime do Pandas.
+- [ ] **Fase 3**: Anti-spam (remover duplicatas < 5 min)
+  - Código pronto em `feature/fase-3-anti-spam`
+  - Testes prontos em `test_level2_anti_spam.py`
+  - Documentação em `docs/PHASES.md`
 
-Limpeza de Strings: Padronizar a coluna Name (remover espaços em branco no início/fim, converter para formato "Title Case").
+### [ ] Planejado
 
-Fase 3: Transformação Nível 2 (Regras de Negócio & Anti-Spam)
+- [ ] **Fase 4**: Hierarquia (estruturar em árvore temporal)
+- [ ] **Fase 5**: Carga (exportar JSON final)
 
-Identificação de Batida: Um funcionário é unicamente identificado pela combinação do seu EnNo (ID) e Name.
+**Detalhamento completo**: Ver [docs/PHASES.md](docs/PHASES.md)
 
-Regra Anti-Spam (Tolerância): Agrupar os dados por funcionário e ordenar por data/hora. Se a diferença de tempo entre duas marcações consecutivas do mesmo funcionário for inferior a 5 minutos, a segunda marcação deve ser considerada um "duplo clique" acidental no leitor e deve ser descartada.
+## Como Começar
 
-Fase 4: Transformação Nível 3 (Estruturação Hierárquica)
+### 1️⃣ Instalar
 
-Extrair o Ano, Mês e Dia a partir da coluna de Data tratada.
+```bash
+pip install -r requirements.txt
+```
 
-Agrupar as marcações limpas criando a estrutura aninhada final.
+### 2️⃣ Rodar Testes
 
-Garantir que, dentro de cada dia, a lista de batidas (["08:00", "12:00", "13:00", "18:00"]) esteja estritamente ordenada do menor para o maior.
+```bash
+# Testes Fases 1+2 (✅ devem passar)
+pytest -v
 
-Fase 5: Carga (Load)
+# Apenas Fase 1
+pytest tests/test_extraction.py -v
 
-Ação: Exportar a estrutura hierárquica construída na Fase 4 para o diretório /data/processed/.
+# Apenas Fase 2
+pytest tests/test_level1_cleaning.py -v
 
-Formato Primário: Salvar como dados_ponto.json para garantir a preservação da hierarquia.
+# Com coverage
+pytest --cov=src tests/
+```
 
-7. Roadmap de Execução (Checklist)
+### 3️⃣ Rodar Pipeline
 
-Acompanhamento conceitual do progresso do projeto. Marcar com [x] ao concluir cada etapa.
+```bash
+python src/etl_pipeline.py
+```
 
-[x] Fase 0: Setup Inicial
+Esperado: `head()` dos dados após Fase 2 (limpeza aplicada).
 
-[x] Definição da Arquitetura e Regras
+### 4️⃣ Ver Documentação
 
-[x] Criação da estrutura de pastas
+Completa em [docs/README.md](docs/README.md)
 
-[x] Configuração do repositório Git
+## Exemplos Rápidos
 
-[x] Fase 1: Extração (Extract)
+### Carregar e Limpar
 
-[x] Carregamento do TXT bruto
+```python
+from src.etl_pipeline import load_raw_log, transform_level1, transform_level2
 
-[x] Tratamento de encoding e separadores
+# Fase 1: Carregar
+raw = load_raw_log()  # (7744, 7)
 
-[x] Fase 2: Transformação Nível 1 (Limpeza)
+# Fase 2: Limpar
+clean = transform_level1(raw)  # (7744, 3)
 
-[x] Remoção de colunas desnecessárias
+# Fase 3: Anti-spam
+filtered = transform_level2(clean)  # (7200, 3)
+```
 
-[x] Conversão e tipagem do DateTime
+### Inspecionar Dados
 
-[x] Padronização dos nomes
+```python
+from src.etl_pipeline import load_raw_log
 
-[ ] Fase 3: Transformação Nível 2 (Anti-Spam)
+df = load_raw_log()
+print(df.info())
+print(df.describe())
+print(df.head(10))
+```
 
-[ ] Agrupamento por funcionário (ID + Nome)
+---
 
-[ ] Aplicação da regra de exclusão (gap < 5 min)
+## Contribuindo
 
-[ ] Fase 4: Transformação Nível 3 (Hierarquia)
+Siga [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md) para branches e commits.
 
-[ ] Extração de chaves temporais (Ano, Mês, Dia)
+**Checklist rápido**:
+- [ ] Feature branch `feature/fase-X-descricao`
+- [ ] Testes passando localmente
+- [ ] Commits com mensagens claras
+- [ ] Push e merge em `main`
+- [ ] Atualizar documentação
 
-[ ] Construção do dicionário aninhado
+---
 
-[ ] Ordenação cronológica das listas de batidas
+## Troubleshooting
 
-[ ] Fase 5: Carga (Load)
+| Erro | Solução |
+|------|---------|
+| `FileNotFoundError: Raw file not found` | Copiar `AGL_001.TXT` para `data/raw/` ou raiz do projeto |
+| `ModuleNotFoundError: No module named 'pandas'` | `pip install -r requirements.txt` |
+| Testes falhando | Ver [docs/TESTING.md](docs/TESTING.md#debugging-testes-falhando) |
 
-[ ] Exportação do arquivo .json final
+---
+
+## Status & Métricas
+
+| Métrica | Valor |
+|---------|-------|
+| Funções públicas | 9 |
+| Testes | 11/18 passando (Fases 1-2) |
+| Cobertura | ~96% (Fases 1-2) |
+| Linhas de código | ~400 |
+| Fases completas | 2/5 |
+
+---
+
+**Última atualização**: 2 de maio de 2026
+
+Para mais informações, visite [docs/README.md](docs/README.md)
