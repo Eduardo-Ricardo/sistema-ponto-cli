@@ -39,7 +39,7 @@ No | TMNo | EnNo | Name       | GMNo | Mode | DateTime
 
 - ✅ **Fase 1** (Extração) — Completo
 - ✅ **Fase 2** (Limpeza L1) — Completo
-- 🚧 **Fase 3** (Anti-Spam) — Em documentação
+- ✅ **Fase 3** (Anti-Spam) — Completo (11 testes passando)
 - [ ] **Fase 4** (Hierarquia) — Planejado
 - [ ] **Fase 5** (Carga JSON) — Planejado
 
@@ -50,7 +50,7 @@ git clone https://github.com/Eduardo-Ricardo/sistema-ponto-cli.git
 cd sistema-ponto-cli
 pip install -r requirements.txt
 pytest -v
-python src/etl_pipeline.py
+python src/main.py
 ```
 
 ---
@@ -66,6 +66,12 @@ sistema-ponto-cli/
 │   └── processed/            # Output: dados_ponto.json (Fase 5)
 ├── src/
 │   ├── main.py               # Fachada do pipeline ETL
+│   ├── extraction.py         # Módulo de leitura (Fase 1)
+│   ├── cleaning.py           # Módulo de limpeza (Fase 2)
+│   ├── rules/
+│   │   ├── __init__.py
+│   │   └── anti_spam.py      # Módulo anti-spam (Fase 3)
+│   ├── utils.py              # Utilitários
 │   └── __init__.py
 ├── tests/
 │   ├── test_extraction.py           # Testes Fase 1 (2 testes ✅)
@@ -102,13 +108,6 @@ sistema-ponto-cli/
 
 ### 🚧 Em Desenvolvimento
 
-- [ ] **Fase 3**: Anti-spam (remover duplicatas < 5 min)
-  - Código pronto em `feature/fase-3-anti-spam`
-  - Testes prontos em `test_level2_anti_spam.py`
-  - Documentação em `docs/PHASES.md`
-
-### [ ] Planejado
-
 - [ ] **Fase 4**: Hierarquia (estruturar em árvore temporal)
 - [ ] **Fase 5**: Carga (exportar JSON final)
 
@@ -141,10 +140,10 @@ pytest --cov=src tests/
 ### 3️⃣ Rodar Pipeline
 
 ```bash
-python src/etl_pipeline.py
+python src/main.py
 ```
 
-Esperado: `head()` dos dados após Fase 2 (limpeza aplicada).
+Esperado: `head()` dos dados após Fase 3 (anti-spam aplicado).
 
 ### 4️⃣ Ver Documentação
 
