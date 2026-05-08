@@ -209,10 +209,10 @@ Siga [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md) para branches e commits.
 | Testes | 11/18 passando (Fases 1-2) |
 | Cobertura | ~96% (Fases 1-2) |
 | Linhas de código | ~400 |
-| Fases completas | 2/5 |
+| Fases completas | 3/5 |
 
 ---
 
-**Última atualização**: 2 de maio de 2026
+**Última atualização**: 8 de maio de 2026
 
 Para mais informações, visite [docs/README.md](docs/README.md)
