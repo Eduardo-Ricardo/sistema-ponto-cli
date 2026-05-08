@@ -125,7 +125,7 @@ import pandas as pd
 import shutil
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from etl_pipeline import load_raw_log, transform_levelX  # ← import necessário
+from main import load_raw_log, transform_levelX  # ← import necessário
 
 def test_nova_funcao(tmp_path):
     """Breve descrição do que o teste valida."""
@@ -168,7 +168,7 @@ def test_nova_funcao(tmp_path):
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 ```
 
-No topo do arquivo `test_*.py`, ANTES de `from etl_pipeline import ...`
+No topo do arquivo `test_*.py`, ANTES de `from main import ...`
 
 ### Erro: `FileNotFoundError: Raw file not found`
 
@@ -244,7 +244,7 @@ Mostra qual linhas não foram testadas.
 
 ### Targets
 
-- **Target**: 90%+ cobertura de `src/etl_pipeline.py`
+- **Target**: 90%+ cobertura de `src/main.py`
 - **Status Fase 1**: ✅ ~95%
 - **Status Fase 2**: ✅ ~98%
 - **Status Fase 3**: 🚧 Em progresso

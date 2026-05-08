@@ -39,7 +39,7 @@ Referência completa de funções públicas em `src/etl_pipeline.py`.
 
 **Exemplo**:
 ```python
->>> from src.etl_pipeline import resolve_raw_file_path
+>>> from src.main import resolve_raw_file_path
 >>> resolve_raw_file_path()
 PosixPath('/workspaces/sistema-ponto-cli/data/raw/AGL_001.TXT')
 
@@ -71,7 +71,7 @@ PosixPath('/workspaces/sistema-ponto-cli/arquivo_customizado.txt')
 
 **Exemplo**:
 ```python
->>> from src.etl_pipeline import load_raw_log
+>>> from src.main import load_raw_log
 >>> df = load_raw_log()
 >>> df.shape
 (7744, 7)
@@ -306,7 +306,7 @@ Depois: 7200 linhas
 ### Pipeline Completo (Fase 1-3)
 
 ```python
-from src.etl_pipeline import load_raw_log, transform_level1, transform_level2
+from src.main import load_raw_log, transform_level1, transform_level2
 
 # Extração
 raw = load_raw_log()
@@ -328,7 +328,7 @@ print(f"Spam removido: {len(cleaned) - len(filtered)} linhas")  # 544
 
 ```python
 import pandas as pd
-from src.etl_pipeline import load_raw_log, parse_datetime
+from src.main import load_raw_log, parse_datetime
 
 df = load_raw_log()
 

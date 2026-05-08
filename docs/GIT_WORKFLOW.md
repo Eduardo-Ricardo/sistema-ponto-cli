@@ -98,13 +98,13 @@ git checkout -b feature/fase-3-anti-spam
 
 ```bash
 # Editar código
-# vim src/etl_pipeline.py
+# vim src/main.py
 
 # Rodar testes
 pytest -v
 
 # Rodar code completo
-python src/etl_pipeline.py
+python src/main.py
 ```
 
 ### 3. Commit Incremental
@@ -114,7 +114,7 @@ python src/etl_pipeline.py
 git status
 
 # Stage seletivo (não git add .)
-git add src/etl_pipeline.py
+git add src/main.py
 git commit -m "Fase 3: implementar identify_employee e apply_anti_spam_rule"
 
 # Se testes em branch separada
@@ -247,7 +247,7 @@ git merge --ff-only feature/fase-3-anti-spam
 
 ```bash
 git merge feature/fase-3-anti-spam
-# CONFLICT (content): Merge conflict in src/etl_pipeline.py
+# CONFLICT (content): Merge conflict in src/main.py
 
 # Ver conflitos
 git status
@@ -283,7 +283,7 @@ def transform_level2(df):
 **Após resolver**:
 
 ```bash
-git add src/etl_pipeline.py
+git add src/main.py
 git commit -m "Merge branch feature/fase-3-anti-spam (resolve conflict)"
 git push origin main
 ```
@@ -315,7 +315,7 @@ git diff main feature/fase-3-anti-spam
 git diff 79b1e14 ee0a652
 
 # De um arquivo específico
-git diff src/etl_pipeline.py
+git diff src/main.py
 ```
 
 ### Ver commits por author/date

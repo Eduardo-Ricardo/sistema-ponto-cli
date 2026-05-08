@@ -65,7 +65,7 @@ sistema-ponto-cli/
 │   ├── raw/                  # Input: AGL_001.TXT bruto
 │   └── processed/            # Output: dados_ponto.json (Fase 5)
 ├── src/
-│   ├── etl_pipeline.py       # Core ETL (9 funções públicas)
+│   ├── main.py               # Fachada do pipeline ETL
 │   └── __init__.py
 ├── tests/
 │   ├── test_extraction.py           # Testes Fase 1 (2 testes ✅)
