@@ -5,7 +5,6 @@ Pipeline ETL que transforma logs brutos de relógio de ponto em dados estruturad
 ## ⚡ Quick Links
 
 - 🚀 **[Quick Start](docs/QUICK_START.md)** — Setup e primeiro teste em 2 minutos
-- 📚 **[Documentação Completa](docs/README.md)** — Índice de todos os guias
 - 🏗️ **[Arquitetura](docs/ARCHITECTURE.md)** — Padrão de design e princípios
 - 📋 **[Fases (1-5)](docs/PHASES.md)** — Detalhamento de cada etapa do ETL
 - 🔧 **[API Reference](docs/API.md)** — Todas as funções públicas
@@ -147,7 +146,7 @@ Esperado: `head()` dos dados após Fase 3 (anti-spam aplicado).
 
 ### 4️⃣ Ver Documentação
 
-Completa em [docs/README.md](docs/README.md)
+Veja em [docs/PHASES.md](docs/PHASES.md) para detalhes de todas as fases
 
 ## Exemplos Rápidos
 
