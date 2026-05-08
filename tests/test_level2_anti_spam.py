@@ -5,7 +5,7 @@ import shutil
 import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from etl_pipeline import load_raw_log, transform_level1, identify_employee, apply_anti_spam_rule, transform_level2
+from pipeline import load_raw_log, transform_level1, identify_employee, apply_anti_spam_rule, transform_level2
 
 
 def test_identify_employee(tmp_path):

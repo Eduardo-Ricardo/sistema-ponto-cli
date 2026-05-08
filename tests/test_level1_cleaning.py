@@ -4,7 +4,7 @@ import pandas as pd
 import shutil
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from etl_pipeline import load_raw_log, clean_columns, parse_datetime, clean_names, transform_level1
+from pipeline import load_raw_log, clean_columns, parse_datetime, clean_names, transform_level1
 
 
 def test_clean_columns(tmp_path):

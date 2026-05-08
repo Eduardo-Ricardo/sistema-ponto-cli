@@ -1,8 +1,4 @@
-"""Compatibilidade com o nome antigo do módulo ETL."""
-
-from __future__ import annotations
-
-from pipeline import *  # noqa: F401,F403"""Fachada do pipeline ETL.
+"""Fachada do pipeline ETL.
 
 Este módulo preserva a API pública usada pelos testes e scripts, enquanto a
 implementação real vive em módulos especializados.
