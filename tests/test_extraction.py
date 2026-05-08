@@ -5,7 +5,7 @@ import pandas as pd
 
 # Ensure 'src' package is importable when pytest runs from project root
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from pipeline import resolve_raw_file_path, load_raw_log
+from main import resolve_raw_file_path, load_raw_log
 
 
 def test_resolve_raw_file_path_fixture(tmp_path):
