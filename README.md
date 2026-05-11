@@ -25,9 +25,11 @@ No | TMNo | EnNo | Name       | GMNo | Mode | DateTime
 {
   "2000": {
     "05": {
-      "28": {
-        "1_Usuario 1": ["10:51:39"],
-        "2_Usuario 2": ["11:00:00"]
+      "1_Usuario 1": {
+        "28": ["10:51:39"]
+      },
+      "2_Usuario 2": {
+        "28": ["11:00:00"]
       }
     }
   }
@@ -75,7 +77,9 @@ sistema-ponto-cli/
 ├── tests/
 │   ├── test_extraction.py           # Testes Fase 1 (2 testes ✅)
 │   ├── test_level1_cleaning.py      # Testes Fase 2 (4 testes ✅)
-│   ├── test_level2_anti_spam.py     # Testes Fase 3 (5 testes 🚧)
+│   ├── test_level2_anti_spam.py     # Testes Fase 3 (5 testes ✅)
+│   ├── test_level3_hierarchy.py     # Testes Fase 4 (4 testes ✅)
+│   ├── test_level4_load.py          # Testes Fase 5 (4 testes ✅)
 │   └── fixtures/sample_agl.txt      # Fixture reutilizável
 ├── docs/
 │   ├── README.md             # Índice da documentação

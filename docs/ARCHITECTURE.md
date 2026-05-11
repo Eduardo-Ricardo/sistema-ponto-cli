@@ -4,10 +4,6 @@ Padrão arquitetural, princípios de design e decisões técnicas.
 
 ## Padrão: Modular ETL Pipeline
 
-**Escolha**: Rejeitar MVC/padrões convencionais em favor de um pipeline funcional estrito.
-
-**Razão**: Pipelines de dados fazem transformações sequenciais e isoladas. Fácil de testar, debugar e estender.
-
 **Estrutura**:
 
 ```
@@ -21,7 +17,7 @@ entrada (raw TXT)
     ↓
     [FASE 2: identificar_employee → aplicar_anti_spam]
     ↓
-    [FASE 3: extrair_hierarquia]
+    [FASE 3: extrair_hierarquia (Ano → Mês → Funcionário → Dia)]
     ↓
     [FASE 4: exportar_json]
     ↓

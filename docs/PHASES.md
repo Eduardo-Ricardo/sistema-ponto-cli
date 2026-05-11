@@ -174,7 +174,7 @@ EnNo | Name      | DateTime
 
 ## Fase 4: Transformação Nível 3 (Hierarquia) [ ]
 
-**Objetivo**: Estruturar dados em hierarquia temporal: Ano → Mês → Dia → Funcionário → [Horários]
+**Objetivo**: Estruturar dados em hierarquia temporal: Ano → Mês → Funcionário → Dia → [Horários]
 
 **Input**: DataFrame anti-spam (do `transform_level2()`)
 
@@ -186,12 +186,45 @@ EnNo | Name      | DateTime
 - `build_hierarchy(df)` — constrói estrutura aninhada
 - `transform_level3(df)` — orquestrador
 
+### Exemplo
+
+**Input** (após Fase 3 - Anti-Spam):
+```
+EnNo | Name      | DateTime
+1    | Usuario 1 | 2000-05-28 10:51:39
+1    | Usuario 1 | 2000-05-28 10:51:46 (removida, gap < 5min)
+2    | Usuario 2 | 2000-05-28 11:00:00
+```
+
+**Output** (Hierarquia estruturada):
+```json
+{
+  "2000": {
+    "05": {
+      "1_Usuario 1": {
+        "28": ["10:51:39"]
+      },
+      "2_Usuario 2": {
+        "28": ["11:00:00"]
+      }
+    }
+  }
+}
+```
+
+**Estrutura da Hierarquia**:
+- **Nível 1 (ANO):** `"2000"` (string YYYY)
+- **Nível 2 (MÊS):** `"05"` (string MM)
+- **Nível 3 (FUNCIONÁRIO):** `"1_Usuario 1"` (string EnNo_Name)
+- **Nível 4 (DIA):** `"28"` (string DD)
+- **Nível 5 (HORÁRIOS):** `["10:51:39"]` (array HH:MM:SS)
+
 ### Testes
 
 - `test_extract_temporal_keys()` — extração de chaves temporais
-- `test_build_hierarchy()` — estrutura aninhada correta
+- `test_build_hierarchy_orders_employees_and_times()` — estrutura aninhada correta
 - `test_hierarchy_sorted()` — horários ordenados cronologicamente
-- `test_transform_level3_full_pipeline()` — pipeline completo L1+L2+L3
+- `test_transform_level3_returns_empty_dict_for_empty_dataframe()` — caso vazio
 
 **Status**: ✅ **COMPLETO** — Implementado em [src/rules/hierarchy.py](../../src/rules/hierarchy.py)
 
