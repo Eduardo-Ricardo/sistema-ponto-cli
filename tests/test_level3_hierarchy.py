@@ -33,11 +33,11 @@ def test_build_hierarchy_orders_employees_and_times():
 	)
 
 	hierarchy = build_hierarchy(df)
-	day_bucket = hierarchy["2000"]["05"]["28"]
+	month_bucket = hierarchy["2000"]["05"]
 
-	assert list(day_bucket.keys()) == ["1_Usuario 1", "2_Usuario 2"]
-	assert day_bucket["1_Usuario 1"] == ["10:00:00", "10:10:00"]
-	assert day_bucket["2_Usuario 2"] == ["08:06:00"]
+	assert list(month_bucket.keys()) == ["1_Usuario 1", "2_Usuario 2"]
+	assert month_bucket["1_Usuario 1"]["28"] == ["10:00:00", "10:10:00"]
+	assert month_bucket["2_Usuario 2"]["28"] == ["08:06:00"]
 
 
 def test_transform_level3_returns_empty_dict_for_empty_dataframe():
@@ -57,10 +57,8 @@ def test_transform_level3_full_pipeline(tmp_path):
 	assert hierarchy == {
 		"2000": {
 			"05": {
-				"28": {
-					"1_Usuario 1": ["10:51:39"],
-					"2_Usuario 2": ["11:00:00"],
-				}
+				"1_Usuario 1": {"28": ["10:51:39"]},
+				"2_Usuario 2": {"28": ["11:00:00"]},
 			}
 		}
 	}

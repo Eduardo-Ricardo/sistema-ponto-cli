@@ -15,22 +15,22 @@ def extract_temporal_keys(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_hierarchy(df: pd.DataFrame) -> dict[str, dict[str, dict[str, dict[str, list[str]]]]]:
-    """Monta a hierarquia Ano -> Mês -> Dia -> Funcionário -> horários."""
+    """Monta a hierarquia Ano -> Mês -> Funcionário -> Dia -> horários."""
     if df.empty:
         return {}
 
     hierarchy: dict[str, dict[str, dict[str, dict[str, list[str]]]]] = {}
     ordered = df.sort_values(
-        ["Year", "Month", "Day", "EnNo", "Name", "DateTime"],
+        ["Year", "Month", "EnNo", "Name", "Day", "DateTime"],
         kind="mergesort",
     )
 
-    for (year, month, day, en_no, name), group in ordered.groupby(
-        ["Year", "Month", "Day", "EnNo", "Name"], sort=True
+    for (year, month, en_no, name, day), group in ordered.groupby(
+        ["Year", "Month", "EnNo", "Name", "Day"], sort=True
     ):
         employee_key = f"{en_no}_{name}"
-        day_bucket = hierarchy.setdefault(year, {}).setdefault(month, {}).setdefault(day, {})
-        day_bucket[employee_key] = [timestamp.strftime("%H:%M:%S") for timestamp in group["DateTime"]]
+        emp_bucket = hierarchy.setdefault(year, {}).setdefault(month, {}).setdefault(employee_key, {})
+        emp_bucket[day] = [timestamp.strftime("%H:%M:%S") for timestamp in group["DateTime"]]
 
     return hierarchy
 
