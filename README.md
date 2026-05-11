@@ -170,7 +170,7 @@ hierarchy = transform_level3(filtered)
 ### Inspecionar Dados
 
 ```python
-from src.etl_pipeline import load_raw_log
+from src.main import load_raw_log
 
 df = load_raw_log()
 print(df.info())
@@ -215,4 +215,4 @@ Siga [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md) para branches e commits.
 
 ---
 
-**Última atualização**: 8 de maio de 2026
+**Última atualização**: 11 de maio de 2026

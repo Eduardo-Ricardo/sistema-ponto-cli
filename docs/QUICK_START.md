@@ -32,6 +32,9 @@ pytest tests/test_level1_cleaning.py -v
 # Apenas Fase 3 (Anti-Spam)
 pytest tests/test_level2_anti_spam.py -v
 
+# Apenas Fase 4 (Hierarquia)
+pytest tests/test_level3_hierarchy.py -v
+
 # Com coverage
 pytest --cov=src tests/
 ```
@@ -39,7 +42,7 @@ pytest --cov=src tests/
 ## 3. Rodar Pipeline
 
 ```bash
-# Entrypoint: carrega raw → limpa L1 → aplica anti-spam
+# Entrypoint: carrega raw → limpa L1 → aplica anti-spam → monta hierarquia
 python src/main.py
 ```
 
@@ -93,7 +96,7 @@ print(f'Shape: {df.shape}')
 
 ## 6. Próximos Passos
 
-- **Para continuar Fase 3**: Ver [PHASES.md](PHASES.md#fase-3-anti-spam)
+- **Para iniciar Fase 5**: Ver [PHASES.md](PHASES.md#fase-5-carga-load-)
 - **Para entender arquitetura**: Ver [ARCHITECTURE.md](ARCHITECTURE.md)
 - **Para ver referência de funções**: Ver [API.md](API.md)
 - **Para contribuir**: Ver [GIT_WORKFLOW.md](GIT_WORKFLOW.md)
@@ -109,4 +112,4 @@ print(f'Shape: {df.shape}')
 
 ---
 
-**Estado**: Pronto para usar! Fases 1+2 completas, 3 em desenvolvimento.
+**Estado**: Pronto para usar! Fases 1-4 completas, Fase 5 em planejamento.

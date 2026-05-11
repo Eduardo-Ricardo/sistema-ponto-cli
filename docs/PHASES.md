@@ -231,7 +231,7 @@ Fase 2 (Limpeza)
 Fase 3 (Anti-Spam)
     ↓ [✅ COMPLETO]
 Fase 4 (Hierarquia)
-    ↓ [ ] NÃO INICIADO
+    ↓ [✅ COMPLETO]
 Fase 5 (Carga JSON)
     ↓ [ ] NÃO INICIADO
 FINAL: dados_ponto.json
@@ -253,4 +253,4 @@ FINAL: dados_ponto.json
 
 ---
 
-**Última atualização**: 8 de maio de 2026
+**Última atualização**: 11 de maio de 2026

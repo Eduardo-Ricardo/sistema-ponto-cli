@@ -159,7 +159,7 @@ def test_nova_funcao(tmp_path):
 
 ## Debugging Testes Falhando
 
-### Erro: `ModuleNotFoundError: No module named 'etl_pipeline'`
+### Erro: `ModuleNotFoundError: No module named 'main'`
 
 **Causa**: sys.path não foi adicionado corretamente
 

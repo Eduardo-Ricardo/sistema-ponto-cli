@@ -1,6 +1,6 @@
 # 🔧 API Reference
 
-Referência completa de funções públicas em `src/etl_pipeline.py`.
+Referência completa de funções públicas em `src/main.py`.
 
 ## Visão Geral
 
