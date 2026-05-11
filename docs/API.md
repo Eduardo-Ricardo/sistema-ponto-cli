@@ -326,17 +326,37 @@ Depois: 7200 linhas
 
 ### `build_hierarchy(df: pd.DataFrame) -> dict`
 
-**Monta a estrutura Ano -> Mês -> Dia -> Funcionário -> horários.**
+**Monta a estrutura Ano -> Mês -> Funcionário -> Dia -> horários.**
 
 **Parâmetros**:
 - `df` (pd.DataFrame) — DataFrame com colunas `EnNo`, `Name`, `DateTime`, `Year`, `Month`, `Day`
 
 **Retorno**: `dict` — Hierarquia aninhada
 
+**Estrutura de chaves**:
+- **Nível 1 (Ano)**: `"2000"` (string YYYY)
+- **Nível 2 (Mês)**: `"05"` (string MM)
+- **Nível 3 (Funcionário)**: `"1_Usuario 1"` (string EnNo_Name)
+- **Nível 4 (Dia)**: `"28"` (string DD)
+- **Nível 5 (Horários)**: `["10:51:39"]` (array HH:MM:SS)
+
 **Regras**:
-- Datas e funcionários são ordenados explicitamente
+- Funcionários e datas são ordenados explicitamente
 - Horários são formatados como `HH:MM:SS`
 - Se o DataFrame estiver vazio, retorna `{}`
+
+**Exemplo de output**:
+```python
+{
+  "2000": {
+    "05": {
+      "1_Usuario 1": {
+        "28": ["10:51:39", "11:00:00"]
+      }
+    }
+  }
+}
+```
 
 ---
 
