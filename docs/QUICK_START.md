@@ -35,6 +35,9 @@ pytest tests/test_level2_anti_spam.py -v
 # Apenas Fase 4 (Hierarquia)
 pytest tests/test_level3_hierarchy.py -v
 
+# Apenas Fase 5 (Carga JSON)
+pytest tests/test_level4_load.py -v
+
 # Com coverage
 pytest --cov=src tests/
 ```
@@ -112,4 +115,4 @@ print(f'Shape: {df.shape}')
 
 ---
 
-**Estado**: Pronto para usar! Fases 1-4 completas, Fase 5 em planejamento.
+**Estado**: Pronto para usar! Todas as 5 fases completas — projeto em produção.

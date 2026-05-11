@@ -40,7 +40,7 @@ No | TMNo | EnNo | Name       | GMNo | Mode | DateTime
 - ✅ **Fase 2** (Limpeza L1) — Completo
 - ✅ **Fase 3** (Anti-Spam) — Completo (11 testes passando)
 - ✅ **Fase 4** (Hierarquia) — Completo
-- [ ] **Fase 5** (Carga JSON) — Planejado
+- ✅ **Fase 5** (Carga JSON) — Completo
 
 ## Setup Rápido
 
@@ -107,7 +107,7 @@ sistema-ponto-cli/
 
 ### 🚧 Em Desenvolvimento
 
-- [ ] **Fase 5**: Carga (exportar JSON final)
+*Nenhuma fase em desenvolvimento. Projeto concluído!*
 
 **Detalhamento completo**: Ver [docs/PHASES.md](docs/PHASES.md)
 
@@ -207,11 +207,11 @@ Siga [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md) para branches e commits.
 
 | Métrica | Valor |
 |---------|-------|
-| Funções públicas | 12 |
-| Testes | 15/18 passando (Fases 1-4) |
+| Funções públicas | 15 |
+| Testes | 19/22 passando (Fases 1-5) |
 | Cobertura | ~96% (Fases 1-2) |
 | Linhas de código | ~400 |
-| Fases completas | 4/5 |
+| Fases completas | 5/5 |
 
 ---
 

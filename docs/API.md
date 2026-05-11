@@ -18,6 +18,8 @@ Referência completa de funções públicas em `src/main.py`.
 | `extract_temporal_keys` | 4 | DataFrame | DataFrame | Extrair Year/Month/Day |
 | `build_hierarchy` | 4 | DataFrame | dict | Montar hierarquia temporal |
 | `transform_level3` | 4 | DataFrame | dict | Orquestrador Fase 4 |
+| `export_to_json` | 5 | dict | Path | Exportar hierarquia para JSON |
+| `transform_level4` | 5 | dict | Path | Orquestrador Fase 5 |
 
 ---
 
@@ -402,6 +404,51 @@ print(f"Período: {df_parsed['DateTime'].min()} até {df_parsed['DateTime'].max(
 
 ---
 
+---
+
+## Fase 5: Carga (Load)
+
+### `export_to_json(hierarchy: dict, output_path: str | Path = "data/processed/dados_ponto.json") -> Path`
+
+**Exporta hierarquia temporal para arquivo JSON com indentação legível.**
+
+**Parâmetros**:
+- `hierarchy` (dict) — Dicionário aninhado da Fase 4
+- `output_path` (str | Path, padrão="data/processed/dados_ponto.json") — Caminho do arquivo de saída
+
+**Retorno**: `Path` — Caminho absoluto do arquivo criado
+
+**Comportamento**:
+- Cria diretório pai automaticamente se não existir
+- Serializa com `indent=2` para legibilidade
+- Usa encoding UTF-8
+
+---
+
+### `transform_level4(hierarchy: dict, output_path: str | Path = "data/processed/dados_ponto.json") -> Path`
+
+**Orquestrador da Fase 5: encadeia export_to_json.**
+
+**Parâmetros**:
+- `hierarchy` (dict) — Dicionário pós Fase 4
+- `output_path` (str | Path, padrão="data/processed/dados_ponto.json") — Caminho customizável
+
+**Retorno**: `Path` — Caminho absoluto do arquivo salvo
+
+**Exemplo**:
+```python
+>>> from src.main import load_raw_log, transform_level1, transform_level2, transform_level3, transform_level4
+>>> raw = load_raw_log()
+>>> clean = transform_level1(raw)
+>>> filtered = transform_level2(clean)
+>>> hierarchy = transform_level3(filtered)
+>>> output_file = transform_level4(hierarchy)
+>>> print(output_file)
+PosixPath('/workspaces/sistema-ponto-cli/data/processed/dados_ponto.json')
+```
+
+---
+
 ## Performance & Limites
 
 | Operação | Dados | Tempo |
@@ -411,7 +458,8 @@ print(f"Período: {df_parsed['DateTime'].min()} até {df_parsed['DateTime'].max(
 | `parse_datetime()` | 7744 linhas | ~50ms |
 | `clean_names()` | 7744 linhas | ~30ms |
 | `apply_anti_spam_rule()` | 7744 linhas | ~500ms |
-| **Pipeline completo** | 7744 linhas | ~2s |
+| `export_to_json()` | ~7200 hierarquia | ~100ms |
+| **Pipeline completo** | 7744 linhas | ~3s |
 
 ---
 

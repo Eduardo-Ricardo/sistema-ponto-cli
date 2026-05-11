@@ -197,7 +197,7 @@ EnNo | Name      | DateTime
 
 ---
 
-## Fase 5: Carga (Load) [ ]
+## Fase 5: Carga (Load) ✅
 
 **Objetivo**: Exportar hierarquia estruturada para arquivo JSON.
 
@@ -205,17 +205,19 @@ EnNo | Name      | DateTime
 
 **Output**: `data/processed/dados_ponto.json`
 
-### Funções Planejadas
+### Funções Implementadas
 
 - `export_to_json(hierarchy, output_path)` — serializa hierarquia para JSON
+- `transform_level4(hierarchy, output_path)` — orquestrador
 
-### Testes Planejados
+### Testes
 
-- `test_export_to_json()` — arquivo criado, JSON válido
-- `test_export_path_creation()` — diretórios criados automaticamente
-- `test_json_content_matches_hierarchy()` — conteúdo bate com input
+- `test_export_to_json_creates_file()` — arquivo criado
+- `test_export_to_json_valid_json()` — JSON é válido e relável
+- `test_export_to_json_creates_parent_directory()` — diretórios criados automaticamente
+- `test_transform_level4_full_pipeline()` — pipeline completo
 
-**Status**: [ ] **NÃO INICIADO** — Planejado após Fase 4
+**Status**: ✅ **COMPLETO** — Implementado em [src/rules/load.py](../../src/rules/load.py)
 
 ---
 
@@ -233,7 +235,7 @@ Fase 3 (Anti-Spam)
 Fase 4 (Hierarquia)
     ↓ [✅ COMPLETO]
 Fase 5 (Carga JSON)
-    ↓ [ ] NÃO INICIADO
+    ↓ [✅ COMPLETO]
 FINAL: dados_ponto.json
 ```
 
@@ -248,8 +250,8 @@ FINAL: dados_ponto.json
 | 2 | 4 | 4 | ✅ | 2 |
 | 3 | 3 | 5 | ✅ | 4 (refactor/modularize) |
 | 4 | 3 | 4 | ✅ | 1 |
-| 5 | 1 | 3 | [ ] | 0 |
-| **TOTAL** | **13** | **18** | — | **10** |
+| 5 | 2 | 4 | ✅ | 1 |
+| **TOTAL** | **15** | **22** | — | **11** |
 
 ---
 
