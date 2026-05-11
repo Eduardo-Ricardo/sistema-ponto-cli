@@ -180,20 +180,20 @@ EnNo | Name      | DateTime
 
 **Output**: Dicionário aninhado com estrutura hierárquica
 
-### Funções Planejadas
+### Funções Implementadas
 
 - `extract_temporal_keys(df)` — extrai Year, Month, Day
 - `build_hierarchy(df)` — constrói estrutura aninhada
 - `transform_level3(df)` — orquestrador
 
-### Testes Planejados
+### Testes
 
 - `test_extract_temporal_keys()` — extração de chaves temporais
 - `test_build_hierarchy()` — estrutura aninhada correta
 - `test_hierarchy_sorted()` — horários ordenados cronologicamente
 - `test_transform_level3_full_pipeline()` — pipeline completo L1+L2+L3
 
-**Status**: [ ] **NÃO INICIADO** — Planejado para após Fase 3
+**Status**: ✅ **COMPLETO** — Implementado em [src/rules/hierarchy.py](../../src/rules/hierarchy.py)
 
 ---
 
@@ -247,9 +247,9 @@ FINAL: dados_ponto.json
 | 1 | 2 | 2 | ✅ | 2 |
 | 2 | 4 | 4 | ✅ | 2 |
 | 3 | 3 | 5 | ✅ | 4 (refactor/modularize) |
-| 4 | 2 | 4 | [ ] | 0 |
+| 4 | 3 | 4 | ✅ | 1 |
 | 5 | 1 | 3 | [ ] | 0 |
-| **TOTAL** | **12** | **18** | — | **9** |
+| **TOTAL** | **13** | **18** | — | **10** |
 
 ---
 

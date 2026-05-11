@@ -40,10 +40,10 @@ pytest --cov=src tests/
 
 ```bash
 # Entrypoint: carrega raw → limpa L1 → aplica anti-spam
-python src/etl_pipeline.py
+python src/main.py
 ```
 
-Output esperado: `head()` dos dados após Fase 3 (anti-spam aplicado).
+Output esperado: impressão da hierarquia temporal após a Fase 4.
 
 ## 4. Estrutura de Pastas
 
@@ -82,9 +82,9 @@ git log --oneline -n 5
 # Rodar teste único
 pytest tests/test_extraction.py::test_load_raw_log_columns_and_datetime -v
 
-# Ver o head dos dados carregados
+# Ver os dados carregados
 python -c "
-from src.etl_pipeline import load_raw_log
+from src.main import load_raw_log
 df = load_raw_log()
 print(df.head())
 print(f'Shape: {df.shape}')

@@ -20,7 +20,7 @@ No | TMNo | EnNo | Name       | GMNo | Mode | DateTime
 2  | 1    | 1    | usuario 1  | 0    | 1    | 2000/05/28 10:51:46  ← duplicata
 ```
 
-**Output**: `data/processed/dados_ponto.json` (hierarquia limpa)
+**Output**: hierarquia temporal limpa
 ```json
 {
   "2000": {
@@ -39,7 +39,7 @@ No | TMNo | EnNo | Name       | GMNo | Mode | DateTime
 - ✅ **Fase 1** (Extração) — Completo
 - ✅ **Fase 2** (Limpeza L1) — Completo
 - ✅ **Fase 3** (Anti-Spam) — Completo (11 testes passando)
-- [ ] **Fase 4** (Hierarquia) — Planejado
+- ✅ **Fase 4** (Hierarquia) — Completo
 - [ ] **Fase 5** (Carga JSON) — Planejado
 
 ## Setup Rápido
@@ -107,7 +107,6 @@ sistema-ponto-cli/
 
 ### 🚧 Em Desenvolvimento
 
-- [ ] **Fase 4**: Hierarquia (estruturar em árvore temporal)
 - [ ] **Fase 5**: Carga (exportar JSON final)
 
 **Detalhamento completo**: Ver [docs/PHASES.md](docs/PHASES.md)
@@ -142,7 +141,7 @@ pytest --cov=src tests/
 python src/main.py
 ```
 
-Esperado: `head()` dos dados após Fase 3 (anti-spam aplicado).
+Esperado: impressão da hierarquia temporal após a Fase 4.
 
 ### 4️⃣ Ver Documentação
 
@@ -153,7 +152,7 @@ Veja em [docs/PHASES.md](docs/PHASES.md) para detalhes de todas as fases
 ### Carregar e Limpar
 
 ```python
-from src.etl_pipeline import load_raw_log, transform_level1, transform_level2
+from src.main import load_raw_log, transform_level1, transform_level2, transform_level3
 
 # Fase 1: Carregar
 raw = load_raw_log()  # (7744, 7)
@@ -163,6 +162,9 @@ clean = transform_level1(raw)  # (7744, 3)
 
 # Fase 3: Anti-spam
 filtered = transform_level2(clean)  # (7200, 3)
+
+# Fase 4: Hierarquia
+hierarchy = transform_level3(filtered)
 ```
 
 ### Inspecionar Dados
@@ -205,14 +207,12 @@ Siga [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md) para branches e commits.
 
 | Métrica | Valor |
 |---------|-------|
-| Funções públicas | 9 |
-| Testes | 11/18 passando (Fases 1-2) |
+| Funções públicas | 12 |
+| Testes | 15/18 passando (Fases 1-4) |
 | Cobertura | ~96% (Fases 1-2) |
 | Linhas de código | ~400 |
-| Fases completas | 3/5 |
+| Fases completas | 4/5 |
 
 ---
 
 **Última atualização**: 8 de maio de 2026
-
-Para mais informações, visite [docs/README.md](docs/README.md)

@@ -15,6 +15,9 @@ Referência completa de funções públicas em `src/etl_pipeline.py`.
 | `identify_employee` | 3 | DataFrame | DataFrame | Criar coluna Employee |
 | `apply_anti_spam_rule` | 3 | DataFrame | DataFrame | Remover duplicatas |
 | `transform_level2` | 3 | DataFrame | DataFrame | Orquestrador Fase 3 |
+| `extract_temporal_keys` | 4 | DataFrame | DataFrame | Extrair Year/Month/Day |
+| `build_hierarchy` | 4 | DataFrame | dict | Montar hierarquia temporal |
+| `transform_level3` | 4 | DataFrame | dict | Orquestrador Fase 4 |
 
 ---
 
@@ -297,6 +300,58 @@ Antes: 7744 linhas
 >>> print(f"Depois: {len(df_filtered)} linhas")
 Depois: 7200 linhas
    # ~544 linhas removidas como spam
+```
+
+---
+
+## Fase 4: Hierarquia Temporal
+
+### `extract_temporal_keys(df: pd.DataFrame) -> pd.DataFrame`
+
+**Extrai Year, Month e Day a partir de DateTime com zero-padding.**
+
+**Parâmetros**:
+- `df` (pd.DataFrame) — DataFrame com coluna `DateTime` em datetime64[ns]
+
+**Retorno**: `pd.DataFrame` — Cópia com colunas `Year`, `Month` e `Day`
+
+**Formato das chaves**:
+- `Year` como `"2000"`
+- `Month` como `"05"`
+- `Day` como `"28"`
+
+---
+
+### `build_hierarchy(df: pd.DataFrame) -> dict`
+
+**Monta a estrutura Ano -> Mês -> Dia -> Funcionário -> horários.**
+
+**Parâmetros**:
+- `df` (pd.DataFrame) — DataFrame com colunas `EnNo`, `Name`, `DateTime`, `Year`, `Month`, `Day`
+
+**Retorno**: `dict` — Hierarquia aninhada
+
+**Regras**:
+- Datas e funcionários são ordenados explicitamente
+- Horários são formatados como `HH:MM:SS`
+- Se o DataFrame estiver vazio, retorna `{}`
+
+---
+
+### `transform_level3(df: pd.DataFrame) -> dict`
+
+**Orquestrador da Fase 4: extrai chaves temporais e monta a hierarquia.**
+
+**Parâmetros**:
+- `df` (pd.DataFrame) — DataFrame pós anti-spam
+
+**Retorno**: `dict` — Hierarquia pronta para exibição ou persistência
+
+**Exemplo**:
+```python
+>>> hierarchy = transform_level3(filtered)
+>>> hierarchy["2000"]["05"]["28"]
+{"1_Usuario 1": ["10:51:39"], "2_Usuario 2": ["11:00:00"]}
 ```
 
 ---
