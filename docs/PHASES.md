@@ -172,83 +172,26 @@ EnNo | Name      | DateTime
 
 ---
 
-## Fase 4: Transformação Nível 3 (Hierarquia) [ ]
+## Fase 4: Exportação CSV ✅
 
-**Objetivo**: Estruturar dados em hierarquia temporal: Ano → Mês → Funcionário → Dia → [Horários]
+**Objetivo**: Preparar a saída final do pipeline como CSV com as colunas `ID`, `NOME`, `DATA` e `HORA`.
 
 **Input**: DataFrame anti-spam (do `transform_level2()`)
 
-**Output**: Dicionário aninhado com estrutura hierárquica
+**Output**: `data/processed/dados_ponto.csv`
 
 ### Funções Implementadas
 
-- `extract_temporal_keys(df)` — extrai Year, Month, Day
-- `build_hierarchy(df)` — constrói estrutura aninhada
-- `transform_level3(df)` — orquestrador
-
-### Exemplo
-
-**Input** (após Fase 3 - Anti-Spam):
-```
-EnNo | Name      | DateTime
-1    | Usuario 1 | 2000-05-28 10:51:39
-1    | Usuario 1 | 2000-05-28 10:51:46 (removida, gap < 5min)
-2    | Usuario 2 | 2000-05-28 11:00:00
-```
-
-**Output** (Hierarquia estruturada):
-```json
-{
-  "2000": {
-    "05": {
-      "1_Usuario 1": {
-        "28": ["10:51:39"]
-      },
-      "2_Usuario 2": {
-        "28": ["11:00:00"]
-      }
-    }
-  }
-}
-```
-
-**Estrutura da Hierarquia**:
-- **Nível 1 (ANO):** `"2000"` (string YYYY)
-- **Nível 2 (MÊS):** `"05"` (string MM)
-- **Nível 3 (FUNCIONÁRIO):** `"1_Usuario 1"` (string EnNo_Name)
-- **Nível 4 (DIA):** `"28"` (string DD)
-- **Nível 5 (HORÁRIOS):** `["10:51:39"]` (array HH:MM:SS)
+- `prepare_csv_output(df)` — seleciona e renomeia as colunas finais
+- `export_to_csv(df, output_path)` — escreve o CSV em disco
+- `transform_level4(df, output_path)` — orquestrador final
 
 ### Testes
 
-- `test_extract_temporal_keys()` — extração de chaves temporais
-- `test_build_hierarchy_orders_employees_and_times()` — estrutura aninhada correta
-- `test_hierarchy_sorted()` — horários ordenados cronologicamente
-- `test_transform_level3_returns_empty_dict_for_empty_dataframe()` — caso vazio
-
-**Status**: ✅ **COMPLETO** — Implementado em [src/rules/hierarchy.py](../../src/rules/hierarchy.py)
-
----
-
-## Fase 5: Carga (Load) ✅
-
-**Objetivo**: Exportar hierarquia estruturada para arquivo JSON.
-
-**Input**: Dicionário hierárquico (do `transform_level3()`)
-
-**Output**: `data/processed/dados_ponto.json`
-
-### Funções Implementadas
-
-- `export_to_json(hierarchy, output_path)` — serializa hierarquia para JSON
-- `transform_level4(hierarchy, output_path)` — orquestrador
-
-### Testes
-
-- `test_export_to_json_creates_file()` — arquivo criado
-- `test_export_to_json_valid_json()` — JSON é válido e relável
-- `test_export_to_json_creates_parent_directory()` — diretórios criados automaticamente
-- `test_transform_level4_full_pipeline()` — pipeline completo
+- `test_prepare_csv_output_creates_expected_columns()` — valida colunas e valores derivados
+- `test_export_to_csv_creates_file()` — arquivo criado
+- `test_export_to_csv_creates_parent_directory()` — diretórios criados automaticamente
+- `test_transform_level4_full_pipeline()` — pipeline completo até CSV
 
 **Status**: ✅ **COMPLETO** — Implementado em [src/rules/load.py](../../src/rules/load.py)
 
@@ -265,11 +208,9 @@ Fase 2 (Limpeza)
     ↓ [✅ COMPLETO]
 Fase 3 (Anti-Spam)
     ↓ [✅ COMPLETO]
-Fase 4 (Hierarquia)
+Fase 4 (Exportação CSV)
     ↓ [✅ COMPLETO]
-Fase 5 (Carga JSON)
-    ↓ [✅ COMPLETO]
-FINAL: dados_ponto.json
+FINAL: dados_ponto.csv
 ```
 
 ---

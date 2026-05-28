@@ -6,7 +6,7 @@ Pipeline ETL que transforma logs brutos de relógio de ponto em dados estruturad
 
 - 🚀 **[Quick Start](docs/QUICK_START.md)** — Setup e primeiro teste em 2 minutos
 - 🏗️ **[Arquitetura](docs/ARCHITECTURE.md)** — Padrão de design e princípios
-- 📋 **[Fases (1-5)](docs/PHASES.md)** — Detalhamento de cada etapa do ETL
+- 📋 **[Fases (1-4)](docs/PHASES.md)** — Detalhamento de cada etapa do ETL
 - 🔧 **[API Reference](docs/API.md)** — Todas as funções públicas
 - 🧪 **[Testing Guide](docs/TESTING.md)** — Estratégia de testes
 - 🔀 **[Git Workflow](docs/GIT_WORKFLOW.md)** — Branches, commits, merges
@@ -20,20 +20,11 @@ No | TMNo | EnNo | Name       | GMNo | Mode | DateTime
 2  | 1    | 1    | usuario 1  | 0    | 1    | 2000/05/28 10:51:46  ← duplicata
 ```
 
-**Output**: hierarquia temporal limpa
-```json
-{
-  "2000": {
-    "05": {
-      "1_Usuario 1": {
-        "28": ["10:51:39"]
-      },
-      "2_Usuario 2": {
-        "28": ["11:00:00"]
-      }
-    }
-  }
-}
+**Output**: CSV com colunas `ID`, `NOME`, `DATA` e `HORA`
+```csv
+ID,NOME,DATA,HORA
+1,Usuario 1,2000-05-28,10:51:39
+2,Usuario 2,2000-05-28,11:00:00
 ```
 
 ## Status
@@ -41,8 +32,7 @@ No | TMNo | EnNo | Name       | GMNo | Mode | DateTime
 - ✅ **Fase 1** (Extração) — Completo
 - ✅ **Fase 2** (Limpeza L1) — Completo
 - ✅ **Fase 3** (Anti-Spam) — Completo (11 testes passando)
-- ✅ **Fase 4** (Hierarquia) — Completo
-- ✅ **Fase 5** (Carga JSON) — Completo
+- ✅ **Fase 4** (Exportação CSV) — Completo
 
 ## Setup Rápido
 
@@ -64,7 +54,7 @@ python src/main.py
 sistema-ponto-cli/
 ├── data/
 │   ├── raw/                  # Input: AGL_001.TXT bruto
-│   └── processed/            # Output: dados_ponto.json (Fase 5)
+│   └── processed/            # Output: dados_ponto.csv (Fase 4)
 ├── src/
 │   ├── main.py               # Fachada do pipeline ETL
 │   ├── extraction.py         # Módulo de leitura (Fase 1)
@@ -78,14 +68,13 @@ sistema-ponto-cli/
 │   ├── test_extraction.py           # Testes Fase 1 (2 testes ✅)
 │   ├── test_level1_cleaning.py      # Testes Fase 2 (4 testes ✅)
 │   ├── test_level2_anti_spam.py     # Testes Fase 3 (5 testes ✅)
-│   ├── test_level3_hierarchy.py     # Testes Fase 4 (4 testes ✅)
-│   ├── test_level4_load.py          # Testes Fase 5 (4 testes ✅)
+│   ├── test_level4_load.py          # Testes Fase 4 (4 testes ✅)
 │   └── fixtures/sample_agl.txt      # Fixture reutilizável
 ├── docs/
 │   ├── README.md             # Índice da documentação
 │   ├── QUICK_START.md        # Setup em 2 minutos
 │   ├── ARCHITECTURE.md       # Padrão arquitetural
-│   ├── PHASES.md             # Detalhamento das 5 fases
+│   ├── PHASES.md             # Detalhamento das 4 fases
 │   ├── API.md                # Referência de funções
 │   ├── TESTING.md            # Estratégia de testes
 │   └── GIT_WORKFLOW.md       # Branches, commits, merges
@@ -145,18 +134,18 @@ pytest --cov=src tests/
 python src/main.py
 ```
 
-Esperado: impressão da hierarquia temporal após a Fase 4.
+Esperado: impressão da confirmação de exportação do CSV final.
 
 ### 4️⃣ Ver Documentação
 
-Veja em [docs/PHASES.md](docs/PHASES.md) para detalhes de todas as fases
+Veja em [docs/PHASES.md](docs/PHASES.md) para detalhes do fluxo atual até a exportação CSV.
 
 ## Exemplos Rápidos
 
 ### Carregar e Limpar
 
 ```python
-from src.main import load_raw_log, transform_level1, transform_level2, transform_level3
+from src.main import load_raw_log, transform_level1, transform_level2, transform_level4
 
 # Fase 1: Carregar
 raw = load_raw_log()  # (7744, 7)
@@ -167,8 +156,8 @@ clean = transform_level1(raw)  # (7744, 3)
 # Fase 3: Anti-spam
 filtered = transform_level2(clean)  # (7200, 3)
 
-# Fase 4: Hierarquia
-hierarchy = transform_level3(filtered)
+# Fase 4: Exportação CSV
+output_file = transform_level4(filtered)
 ```
 
 ### Inspecionar Dados
@@ -189,7 +178,7 @@ print(df.head(10))
 Siga [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md) para branches e commits.
 
 **Checklist rápido**:
-- [ ] Feature branch `feature/fase-X-descricao`
+- [ ] Feature branch `feat/csv-output`
 - [ ] Testes passando localmente
 - [ ] Commits com mensagens claras
 - [ ] Push e merge em `main`
@@ -211,11 +200,11 @@ Siga [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md) para branches e commits.
 
 | Métrica | Valor |
 |---------|-------|
-| Funções públicas | 15 |
-| Testes | 19/22 passando (Fases 1-5) |
+| Funções públicas | 13 |
+| Testes | 15/15 passando (Fluxo CSV) |
 | Cobertura | ~96% (Fases 1-2) |
 | Linhas de código | ~400 |
-| Fases completas | 5/5 |
+| Fases completas | 3/3 |
 
 ---
 
