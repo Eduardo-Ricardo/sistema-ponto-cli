@@ -48,8 +48,6 @@ python src/main.py
 
 ## Estrutura
 
-## Estrutura
-
 ```
 sistema-ponto-cli/
 ├── data/
